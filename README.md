@@ -60,6 +60,7 @@ Each language is a file in `trainer_desk/lang/` (`en.lua`, `es.lua`, `pt.lua`, `
 
 ## Documentation
 
+- [docs/GUIDE.md](docs/GUIDE.md): player guide, using the docks.
 - [docs/API.md](docs/API.md): the panel and theme interface for other mods.
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): how the files fit together and which engine hooks are used.
 - [docs/TRANSLATING.md](docs/TRANSLATING.md): how the translations work and how to change them.
