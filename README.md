@@ -1,44 +1,64 @@
 # Trainer Desk
 
-Layout em estilo IDE para o Gen1Recomp: o jogo fica no centro e painéis de outros mods ficam em docas à esquerda, à direita e embaixo, com abas, divisórias arrastáveis e janelas próprias.
+An IDE-style layout for Gen1Recomp: the game keeps the middle of the window, and panels supplied by other mods sit in docks around it, with tabs, draggable dividers and their own desktop windows.
 
-Feito para Pokémon FireRed/LeafGreen no Gen1Recomp (API de mods 3).
+Built for Pokémon FireRed/LeafGreen on Gen1Recomp (mod API 3). Trainer Desk has no panels of its own; it hosts the ones other mods register, such as Trainer Lens and Trainer Pilot.
 
-## O que faz
+## Features
 
-- Docas com abas; arraste uma aba para mudar de lugar e as divisórias para redimensionar.
-- Abas que não cabem vão para um menu no fim da barra.
-- Cada painel pode sair para uma janela própria do Windows e voltar.
-- **F10** esconde e mostra todas as docas (tecla configurável nas opções do mod).
-- A roda do mouse sobre um painel vai para o painel; sobre o jogo continua sendo o zoom do jogo.
-- Menu no canto do jogo: mostrar/fechar painéis, tema e restaurar o layout.
-- Encaixa como painel a imagem que outro mod manda para a segunda tela (por exemplo, o Kanto Gear).
+- Left, right and bottom docks, each holding tabbed groups of panels.
+- Drag a tab to move a panel to another dock or group; drag a divider to resize.
+- Tabs that do not fit in a bar go into a menu at the end of the bar.
+- Any panel can be taken out into its own desktop window and put back.
+- **F10** hides every dock so the game has the whole window, and brings them back (the key can be changed in the mod's options).
+- The mouse wheel over a panel goes to that panel; over the game it is still the game's zoom.
+- A menu in the corner of the game area shows or closes panels, picks a theme and restores the default layout.
+- The picture a mod sends to the second screen (for example Kanto Gear in Separate Screens mode) can be docked as a panel.
+- The layout, the theme and which panels are closed or floating are remembered between sessions.
 
-## Instalação
+## Installation
 
-Copie a pasta `trainer_desk` para a pasta de mods do jogo:
+Copy the `trainer_desk` folder into the game's mods folder:
 
 ```
 %APPDATA%\pokemon-love2d\mods\trainer_desk
 ```
 
-## Para outros mods
+## Options
 
-`mod.find("trainer_desk").exports.dock` (com `api == 1`) oferece `register{ id, title, width, height, draw | image, pointer, interval, pixel, side, first, responsive }`, `unregister`, `panels`, `show`, `theme`, `registerTheme`, `setTheme`, `active`, `collapsed`, `hotkey`.
+| Option | Default | What it does |
+| --- | --- | --- |
+| IDE layout | on | Turns the docks on or off. |
+| Dock second screen | on | Docks the second-screen picture as a panel instead of opening another window. |
+| Language | Português | Language of the dock's own menu and tooltips (Português or English). |
+| Hide/show key | F10 | Key that hides and shows the docks (F10, F9, F8, F6 or none). |
+| Reset layout | off | Turn on once to put every panel back in its default place. |
 
-Com `responsive = true`, `draw(now, largura, altura)` recebe o espaço real que o painel tem na doca. `pointer(ação, x, y, quantidade)` recebe `"down"`, `"move"`, `"up"`, `"cancel"` e `"wheel"`.
+## For mod authors
 
-## Testes
+Other mods reach the dock through `mod.find("trainer_desk").exports.dock`. See [docs/API.md](docs/API.md) for the full interface. A minimal panel:
 
-Os testes rodam no Linux com LÖVE 11.5 e um X virtual, junto com o Trainer Lens:
-
+```lua
+local other = mod.find and mod.find("trainer_desk")
+local dock = other and other.exports and other.exports.dock
+if dock and dock.api == 1 and dock.active() then
+  dock.register({
+    id = "my_mod.status", title = "Status", width = 320, height = 200,
+    responsive = true,
+    draw = function(now, w, h)
+      love.graphics.print("Hello from my panel", 10, 10)
+    end,
+  })
+end
 ```
-DOCK_MOD=$PWD/trainer_desk PP_MOD=/caminho/trainer-lens/trainer_lens \
-  xvfb-run -a love tests
-```
 
-O resultado esperado é `ALL DOCK CHECKS PASSED`. As imagens geradas vão para `TEST_OUT` (padrão `/tmp/kg_out`).
+## Documentation
 
-## Histórico
+- [docs/API.md](docs/API.md): the panel and theme interface for other mods.
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): how the files fit together and which engine hooks are used.
+- [CHANGELOG.md](CHANGELOG.md): version history.
+- [tests/README.md](tests/README.md): running the automated checks.
 
-Até a versão 0.4.1 se chamava PokeDock (id `poke_dock`).
+## History
+
+Until version 0.4.1 this mod was called PokeDock (id `poke_dock`).
