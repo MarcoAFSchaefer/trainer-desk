@@ -4,7 +4,7 @@
 
 | File | Role |
 | --- | --- |
-| `manifest.json` | Mod id `trainer_desk`, API 3, Gen 3 games, permissions `engine_internals` and `network`. |
+| `manifest.json` | Mod id `trainer_desk`, API 3, Gen 3 games, permission `engine_internals`. |
 | `main.lua` | Options, the API table, painting, pointer and key handling, and the engine hooks. |
 | `layout.lua` | The layout model. No drawing and no engine calls: where panels live, sizes, and the rectangles that follow from a window size. |
 | `theme.lua` | Built-in `dark` theme, theme registration, and resolving a theme over `dark`. |

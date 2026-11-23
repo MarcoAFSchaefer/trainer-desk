@@ -63,9 +63,14 @@ Each language is a file in `trainer_desk/lang/` (`en.lua`, `es.lua`, `pt.lua`, `
 - [docs/API.md](docs/API.md): the panel and theme interface for other mods.
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): how the files fit together and which engine hooks are used.
 - [docs/TRANSLATING.md](docs/TRANSLATING.md): how the translations work and how to change them.
+- [docs/PUBLISHING.md](docs/PUBLISHING.md): releases and the Gen1Recomp mod index.
 - [CHANGELOG.md](CHANGELOG.md): version history.
 - [tests/README.md](tests/README.md): running the automated checks.
 
 ## History
 
 Until version 0.4.1 this mod was called PokeDock (id `poke_dock`).
+
+## License
+
+MIT (see LICENSE). The bundled Japanese font is under the SIL Open Font License (`fonts/OFL.txt`).

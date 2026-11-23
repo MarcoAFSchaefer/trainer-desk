@@ -4,6 +4,8 @@
 
 - The dock's menu and tips in English, Spanish, Portuguese and Japanese (Language option; English by default).
 - Tab titles and menus can draw Japanese text.
+- Drops the unused `network` permission.
+- MIT license, release workflow and a ready mod index entry (docs/PUBLISHING.md).
 
 ## 0.5.0
 

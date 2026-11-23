@@ -15,8 +15,7 @@
   "optional_dependencies": [],
   "conflicts": [],
   "permissions": [
-    "engine_internals",
-    "network"
+    "engine_internals"
   ],
   "description": "An IDE-style window for the game: the game in the middle and dockable panels around it, with tabs and draggable dividers. Other mods add panels through a small API; a mod that sends its picture to the second screen (such as Kanto Gear in Separate Screens mode) is docked as a panel too."
 }
