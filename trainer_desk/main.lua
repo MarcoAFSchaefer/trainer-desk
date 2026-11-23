@@ -16,8 +16,9 @@ return function(mod)
       description = "Show panels from other mods in docks around the game. Drag a divider to resize, drag a tab to move a panel." },
     { key = "capture_second_screen", label = "DOCK SECOND SCREEN", type = "toggle", default = true,
       description = "Dock the picture a mod sends to the second screen (such as Kanto Gear in Separate Screens mode) as a panel instead of opening another window." },
-    { key = "language", label = "LANGUAGE", type = "choice", default = "pt",
-      choices = { { "PORTUGUES", "pt" }, { "ENGLISH", "en" } } },
+    { key = "language", label = "LANGUAGE", type = "choice", default = "en",
+      choices = { { "ENGLISH", "en" }, { "ESPANOL", "es" }, { "PORTUGUES", "pt" }, { "JAPANESE", "ja" } },
+      description = "Language of the dock's menus and tips." },
     { key = "hotkey", label = "HIDE/SHOW KEY", type = "choice", default = "f10",
       choices = { { "F10", "f10" }, { "F9", "f9" }, { "F8", "f8" }, { "F6", "f6" }, { "NONE", "none" } },
       description = "Hides every dock so the game takes the whole window, and brings them back. Panels in their own windows stay open." },
@@ -26,15 +27,9 @@ return function(mod)
   })
   local function option(key) return mod.options:get(key) end
 
-  local TEXT = {
-    pt = { panels = "Painéis", theme = "Tema", reset = "Restaurar layout", window = "janela", closed = "fechado",
-      menu = "Menu da IDE", none = "Nenhum painel registrado", float = "Abrir em janela própria", close = "Fechar painel",
-      more = "Todas as abas", hide = "Esconder a IDE" },
-    en = { panels = "Panels", theme = "Theme", reset = "Reset layout", window = "window", closed = "closed",
-      menu = "IDE menu", none = "No panels registered", float = "Open in its own window", close = "Close panel",
-      more = "All tabs", hide = "Hide the IDE" },
-  }
-  local function T(key) return (TEXT[option("language")] or TEXT.pt)[key] or TEXT.en[key] or key end
+  -- Text in the chosen language (lang/*.lua) and fonts that can draw it (i18n.lua)
+  local I18n = assert(load(assert(mod:read("i18n.lua")), "@trainer_desk/i18n.lua"))()(mod, function() return option("language") end)
+  local T = I18n.T
 
   local LAYOUT_KEY, THEME_KEY = "layout/v1", "theme"
   local panels, order = {}, {}        -- id -> panel, and registration order
@@ -71,7 +66,7 @@ return function(mod)
   local function uiFont()
     if not font or fontSize ~= theme.metrics.font then
       fontSize = theme.metrics.font
-      font = G.newFont(fontSize)
+      font = I18n.font(fontSize)
     end
     return font
   end
@@ -209,7 +204,7 @@ return function(mod)
     if wanted and (not panel or panel.width ~= screen.w or panel.height ~= screen.h) then
       local gear = mod.find and mod.find("kanto_gear")
       api.register({
-        id = SCREEN_ID, title = gear and "Kanto Gear" or "Second screen", side = "right", first = true,
+        id = SCREEN_ID, title = gear and "Kanto Gear" or T("second_screen"), side = "right", first = true,
         width = screen.w, height = screen.h,
         image = function() return screen.image end,
         imageData = function() return screen.data end,

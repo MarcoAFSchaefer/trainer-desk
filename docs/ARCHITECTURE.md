@@ -9,6 +9,9 @@
 | `layout.lua` | The layout model. No drawing and no engine calls: where panels live, sizes, and the rectangles that follow from a window size. |
 | `theme.lua` | Built-in `dark` theme, theme registration, and resolving a theme over `dark`. |
 | `windows.lua` | Desktop windows for floating panels. |
+| `i18n.lua` | Text in the chosen language (`T`, `F`) and fonts that can draw Japanese (`font`). The same file in all three Trainer mods. |
+| `lang/*.lua` | One table of texts per language: `en` (the reference), `es`, `pt`, `ja`. |
+| `fonts/` | `NotoSansJP-subset.ttf` (kana and the characters these mods use) and its license, `OFL.txt`. |
 
 ## The layout model (`layout.lua`)
 

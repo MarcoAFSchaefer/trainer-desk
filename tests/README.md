@@ -18,6 +18,8 @@ xvfb-run -a -s "-screen 0 1280x800x24" love tests
 | `TEST_OUT` | Where screenshots of the panels are written (default `/tmp/kg_out`). |
 | `KG_HOST` | Optional: path to a Gen1Recomp checkout, to also open real floating windows. |
 
-Each passing check prints a line starting with `ok`. The run ends with `ALL DOCK CHECKS PASSED`; a failing check prints `CHECK FAILED` with the reason and stops.
+Each passing check prints a line starting with `ok`. Set `TEST_LANG` to `en`, `es`, `pt` or `ja` to run the checks with that language and get the screenshots in it (default `en`).
+
+The run ends with `ALL DOCK CHECKS PASSED`; a failing check prints `CHECK FAILED` with the reason and stops.
 
 The same file is kept in the Trainer Lens repository.

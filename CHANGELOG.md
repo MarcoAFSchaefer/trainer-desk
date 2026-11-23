@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.0
+
+- The dock's menu and tips in English, Spanish, Portuguese and Japanese (Language option; English by default).
+- Tab titles and menus can draw Japanese text.
+
 ## 0.5.0
 
 - Renamed from PokeDock to Trainer Desk; mod id `poke_dock` becomes `trainer_desk`.

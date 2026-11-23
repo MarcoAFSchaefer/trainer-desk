@@ -30,7 +30,7 @@ Copy the `trainer_desk` folder into the game's mods folder:
 | --- | --- | --- |
 | IDE layout | on | Turns the docks on or off. |
 | Dock second screen | on | Docks the second-screen picture as a panel instead of opening another window. |
-| Language | Português | Language of the dock's own menu and tooltips (Português or English). |
+| Language | English | Language of the dock's own menu and tooltips: ENGLISH, ESPANOL, PORTUGUES or JAPANESE. |
 | Hide/show key | F10 | Key that hides and shows the docks (F10, F9, F8, F6 or none). |
 | Reset layout | off | Turn on once to put every panel back in its default place. |
 
@@ -52,10 +52,17 @@ if dock and dock.api == 1 and dock.active() then
 end
 ```
 
+## Languages
+
+The dock's menu and tips are in English, Spanish, Portuguese and Japanese: choose one with the **Language** option in the mod's settings. Names that come from the game itself (Pokémon, moves, items, places) stay in the language of your game.
+
+Each language is a file in `trainer_desk/lang/` (`en.lua`, `es.lua`, `pt.lua`, `ja.lua`); English is the reference, and a text missing from another language shows in English. Japanese text is drawn with a cut-down copy of Noto Sans JP in `trainer_desk/fonts/` (SIL Open Font License, `fonts/OFL.txt`). See [docs/TRANSLATING.md](docs/TRANSLATING.md) to fix or add a translation.
+
 ## Documentation
 
 - [docs/API.md](docs/API.md): the panel and theme interface for other mods.
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): how the files fit together and which engine hooks are used.
+- [docs/TRANSLATING.md](docs/TRANSLATING.md): how the translations work and how to change them.
 - [CHANGELOG.md](CHANGELOG.md): version history.
 - [tests/README.md](tests/README.md): running the automated checks.
 
