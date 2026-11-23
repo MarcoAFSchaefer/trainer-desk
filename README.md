@@ -16,6 +16,13 @@ Built for Pokémon FireRed/LeafGreen on Gen1Recomp (mod API 3). Trainer Desk has
 - The picture a mod sends to the second screen (for example Kanto Gear in Separate Screens mode) can be docked as a panel.
 - The layout, the theme and which panels are closed or floating are remembered between sessions.
 
+## Compatibility
+
+| | |
+| --- | --- |
+| Games | FireRed and LeafGreen (tested). Declared for every Gen 3 game; Ruby, Sapphire and Emerald not tested yet. |
+| Gen1Recomp | 0.3.93 or newer (mod API 3); tested on 0.4.8 |
+
 ## Installation
 
 Copy the `trainer_desk` folder into the game's mods folder:

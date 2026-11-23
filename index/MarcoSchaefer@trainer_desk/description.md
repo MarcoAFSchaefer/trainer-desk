@@ -11,4 +11,4 @@ Turns the game window into an IDE-style workspace: the game stays in the middle,
 
 Trainer Desk shows nothing by itself: it is the home for panels such as those of **Trainer Lens** and **Trainer Pilot**. Other mods can add their own through a small API, documented in the repository (`docs/API.md`).
 
-Tested on FireRed.
+Tested on FireRed and LeafGreen with Gen1Recomp 0.4.8.
