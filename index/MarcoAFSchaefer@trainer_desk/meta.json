@@ -1,7 +1,7 @@
 {
   "id": "trainer_desk",
   "title": "Trainer Desk",
-  "author": "MarcoSchaefer",
+  "author": "MarcoAFSchaefer",
   "summary": "An IDE-style layout: the game in the middle, dockable tabbed panels from other mods around it, with draggable dividers and themes.",
   "version": "0.6.0",
   "categories": [
@@ -15,8 +15,8 @@
     "layout",
     "frlg"
   ],
-  "repo": "https://github.com/OWNER/trainer-desk",
-  "github": "OWNER/trainer-desk",
+  "repo": "https://github.com/MarcoAFSchaefer/trainer-desk",
+  "github": "MarcoAFSchaefer/trainer-desk",
   "automatic_version_check": true,
   "api": 3,
   "game_version": "0.0.0-dev || >=0.3.93 <2.0.0",
