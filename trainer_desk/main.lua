@@ -74,7 +74,15 @@ return function(mod)
   ---------------------------------------------------------------------------
   -- API for other mods:  mod.find("trainer_desk").exports.dock
   ---------------------------------------------------------------------------
-  local api = { api = 1, features = { responsive = true, wheel = true } }
+  local api = { api = 1, features = { responsive = true, wheel = true, focus = true } }
+  -- focus(prefix): while set, only the panels whose id starts with it are
+  -- repainted at their own pace; the others keep their picture and are
+  -- repainted every 5 seconds. For a mod doing something where every
+  -- millisecond counts (Trainer Pilot's reset hunts). focus(nil) ends it.
+  local focusPrefix
+  function api.focus(prefix)
+    focusPrefix = type(prefix) == "string" and prefix ~= "" and prefix or nil
+  end
 
   -- register{ id, title, width, height, draw | image, [pointer], [interval], [pixel], [side] }
   --   id        lowercase letters, digits, "_" and "."; unique, and the name the layout remembers
@@ -297,7 +305,8 @@ return function(mod)
       panel.width, panel.height = bw, bh
     end
     if clock < (panel.nextAt or 0) and not resized then return false end
-    panel.nextAt = clock + panel.interval
+    local slow = focusPrefix ~= nil and panel.id:sub(1, #focusPrefix) ~= focusPrefix
+    panel.nextAt = clock + (slow and max(5, panel.interval) or panel.interval)
     if not panel.canvas or panel.canvas:getWidth() ~= panel.width or panel.canvas:getHeight() ~= panel.height then
       if panel.canvas then panel.canvas:release() end
       panel.canvas = G.newCanvas(panel.width, panel.height, { dpiscale = 1 })

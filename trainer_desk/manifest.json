@@ -1,7 +1,7 @@
 {
   "id": "trainer_desk",
   "name": "Trainer Desk",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "api": 3,
   "entry": "main.lua",
   "category": "UI",

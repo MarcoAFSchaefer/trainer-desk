@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.0
+
+- `dock.focus(prefix)`: a mod can ask that only its own panels are repainted at full pace for a while; the others keep their picture and refresh every 5 seconds. Trainer Pilot uses it during reset hunts, where panel drawing was a quarter of each attempt's time.
+
 ## 0.6.0
 
 - The dock's menu and tips in English, Spanish, Portuguese and Japanese (Language option; English by default).
