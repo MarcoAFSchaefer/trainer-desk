@@ -2,7 +2,9 @@
 
 An IDE-style layout for Gen1Recomp: the game keeps the middle of the window, and panels supplied by other mods sit in docks around it, with tabs, draggable dividers and their own desktop windows.
 
-![Trainer Desk: the game in the middle and panels from other mods in docks around it](docs/images/layout.png)
+![Trainer Desk: the game in the middle, panels from other mods in docks around it, and the menu that shows or closes panels](docs/images/menu.jpg)
+
+![The same window with other tabs chosen](docs/images/layout.png)
 
 Built for Pokémon FireRed/LeafGreen on Gen1Recomp (mod API 3). Trainer Desk has no panels of its own; it hosts the ones other mods register, such as Trainer Lens and Trainer Pilot.
 
