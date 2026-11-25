@@ -1,3 +1,5 @@
+![Trainer Desk: the Desk Badge of the Trainer Badges](docs/brand/banner.png)
+
 # Trainer Desk
 
 An IDE-style layout for Gen1Recomp: the game keeps the middle of the window, and panels supplied by other mods sit in docks around it, with tabs, draggable dividers and their own desktop windows.
@@ -82,6 +84,21 @@ Each language is a file in `trainer_desk/lang/` (`en.lua`, `es.lua`, `pt.lua`, `
 ## History
 
 Until version 0.4.1 this mod was called PokeDock (id `poke_dock`).
+
+## The Trainer Badges
+
+Six mods for FireRed and LeafGreen that work on their own and better together. Each one is a badge in the same case.
+
+![The six Trainer Badges: Desk, Lens, Pilot, Journey, Controls and Tactics](docs/brand/case.png)
+
+| | Mod | What it does |
+| --- | --- | --- |
+| <img src="https://raw.githubusercontent.com/MarcoAFSchaefer/trainer-desk/main/docs/brand/badge.png" width="40" alt=""> | **Trainer Desk** (this mod) | Docks and tabs around the game. |
+| <img src="https://raw.githubusercontent.com/MarcoAFSchaefer/trainer-lens/main/docs/brand/badge.png" width="40" alt=""> | [Trainer Lens](https://github.com/MarcoAFSchaefer/trainer-lens) | Everything the game knows, on screen. |
+| <img src="https://raw.githubusercontent.com/MarcoAFSchaefer/trainer-pilot/main/docs/brand/badge.png" width="40" alt=""> | [Trainer Pilot](https://github.com/MarcoAFSchaefer/trainer-pilot) | Trains and hunts while you are away. |
+| <img src="https://raw.githubusercontent.com/MarcoAFSchaefer/trainer-journey/main/docs/brand/badge.png" width="40" alt=""> | [Trainer Journey](https://github.com/MarcoAFSchaefer/trainer-journey) | Where to go next, without spoilers. |
+| <img src="https://raw.githubusercontent.com/MarcoAFSchaefer/trainer-controls/main/docs/brand/badge.png" width="40" alt=""> | [Trainer Controls](https://github.com/MarcoAFSchaefer/trainer-controls) | Every button, where you want it. |
+| <img src="https://raw.githubusercontent.com/MarcoAFSchaefer/trainer-tactics/main/docs/brand/badge.png" width="40" alt=""> | [Trainer Tactics](https://github.com/MarcoAFSchaefer/trainer-tactics) | The best play, with the numbers. |
 
 ## What it changes in the game
 
