@@ -26,6 +26,7 @@ Adds a panel, or updates one already registered with the same id. Returns `true`
 | `image()` | one of `draw`/`image` | Instead of `draw`: returns a drawable to show, or `nil` for nothing. |
 | `imageData()` | no | With `image`: the same picture as ImageData, so the panel can also float in its own window. |
 | `pointer(action, x, y, amount)` | no | Pointer input in picture pixels. `action` is `"down"`, `"move"`, `"up"`, `"cancel"` or `"wheel"`; for `"wheel"`, `amount` is positive for up and negative for down. |
+| `icon(x, y, size, alpha)` | no | The mod's mark, drawn before the title in the tab: a square of `size` pixels at `x`, `y`, at `alpha` (dimmer on tabs that are not chosen). Check `features.icon`; older versions ignore the field. |
 | `interval` | no | Seconds between repaints while the panel is visible. Default 0.2, minimum 0.02. |
 | `pixel` | no | Size of one art pixel in the picture, so scaling keeps pixels even. Default 1. |
 | `side` | no | Where a panel new to the layout goes: `"left"`, `"right"` or `"bottom"`. Default `"right"`. |

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.0
+
+- **Badges on the tabs.** A panel may bring its mod's mark: `register{ ..., icon = function(x, y, size, alpha) }` is drawn before the title in the tab (`features.icon`). Tabs with a mark are a little wider.
+- The menu button in the corner of the game area is now the Desk Badge instead of three bars.
+- The mod is now part of the **Trainer Badges**: a badge, a banner and the family case in the README.
+
 ## 0.7.0
 
 - `dock.focus(prefix)`: a mod can ask that only its own panels are repainted at full pace for a while; the others keep their picture and refresh every 5 seconds. Trainer Pilot uses it during reset hunts, where panel drawing was a quarter of each attempt's time.

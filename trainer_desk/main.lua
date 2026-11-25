@@ -74,7 +74,7 @@ return function(mod)
   ---------------------------------------------------------------------------
   -- API for other mods:  mod.find("trainer_desk").exports.dock
   ---------------------------------------------------------------------------
-  local api = { api = 1, features = { responsive = true, wheel = true, focus = true } }
+  local api = { api = 1, features = { responsive = true, wheel = true, focus = true, icon = true } }
   -- focus(prefix): while set, only the panels whose id starts with it are
   -- repainted at their own pace; the others keep their picture and are
   -- repainted every 5 seconds. For a mod doing something where every
@@ -114,6 +114,8 @@ return function(mod)
     panel.draw, panel.image = def.draw, def.image
     panel.imageData = type(def.imageData) == "function" and def.imageData or nil
     panel.pointer = type(def.pointer) == "function" and def.pointer or nil
+    -- icon(x, y, size, alpha): the mod's own mark, drawn before the title in the tab
+    panel.icon = type(def.icon) == "function" and def.icon or nil
     panel.interval = max(0.02, tonumber(def.interval) or 0.2)
     panel.pixel = max(1, floor(tonumber(def.pixel) or 1))
     panel.side, panel.first = def.side, def.first == true
@@ -259,7 +261,7 @@ return function(mod)
   local ICONS = 32          -- room on every tab for the "own window" and "close" marks
   local function tabWidth(id)
     local panel = panels[id]
-    return panel and uiFont():getWidth(panel.title) + theme.metrics.padding * 2 + ICONS or 60
+    return panel and uiFont():getWidth(panel.title) + theme.metrics.padding * 2 + ICONS + (panel.icon and fontSize + 5 or 0) or 60
   end
   -- The tab's two marks; only the active tab shows them.
   local function tabIcons(rect)
@@ -326,6 +328,30 @@ return function(mod)
     return true
   end
 
+  local deskBadge = (function()
+    -- The Desk Badge, this mod's mark in the Trainer Badges family: drawn
+    -- here, on a 100-unit square, so no picture file is needed.
+    local G = love.graphics
+    local SHAPE, LIGHT, DARK = { 12,18, 88,18, 88,82, 12,82 }, { 36,18, 88,18, 88,58, 36,58 }, { 12,18, 34,18, 34,82, 12,82 }
+    local function fillAt(pts, x, y, k, f)
+      local t = {}
+      for i = 1, #pts, 2 do
+        t[i], t[i + 1] = x + (50 + (pts[i] - 50) * f) * k, y + (50 + (pts[i + 1] - 50) * f) * k
+      end
+      local ok, tris = pcall(love.math.triangulate, t)
+      if ok then for _, tri in ipairs(tris) do G.polygon("fill", tri) end end
+    end
+    return function(x, y, size, alpha)
+      local k, a = size / 100, alpha or 1
+      local r, g, b, a0 = G.getColor()
+      G.setColor(0.85, 0.88, 0.92, a); fillAt(SHAPE, x, y, k, 1)
+      G.setColor(0.25, 0.55, 0.94, a); fillAt(SHAPE, x, y, k, 0.8)
+      G.setColor(1, 1, 1, 0.3 * a); fillAt(LIGHT, x, y, k, 0.8)
+      G.setColor(0, 0, 0, 0.28 * a); fillAt(DARK, x, y, k, 0.8)
+      G.setColor(r, g, b, a0)
+    end
+  end)()
+
   local function drawGroup(view, clock, mx, my)
     local colors, metrics = theme.colors, theme.metrics
     fill(view.bar, colors.tabBar)
@@ -337,8 +363,18 @@ return function(mod)
       if current then fill({ x = tab.rect.x, y = tab.rect.y, w = tab.rect.w, h = 2 }, colors.accent) end
       fill({ x = tab.rect.x + tab.rect.w - 1, y = tab.rect.y, w = 1, h = tab.rect.h }, colors.border)
       G.setScissor(tab.rect.x, tab.rect.y, max(1, tab.rect.w - (current and ICONS or 1)), tab.rect.h)
+      local titleX = tab.rect.x + metrics.padding
+      if panel.icon then
+        local size = fontSize + 1
+        local okIcon, errIcon = pcall(panel.icon, titleX, tab.rect.y + floor((metrics.tab - size) / 2), size, current and 1 or 0.7)
+        if not okIcon and not logged[panel.id .. ":icon"] then
+          logged[panel.id .. ":icon"] = true
+          mod.log:warn("panel %s icon: %s", panel.id, tostring(errIcon))
+        end
+        titleX = titleX + size + 5
+      end
       color(current and colors.textActive or colors.text)
-      G.print(panel.title, tab.rect.x + metrics.padding, tab.rect.y + floor((metrics.tab - fontSize) / 2) - 1)
+      G.print(panel.title, titleX, tab.rect.y + floor((metrics.tab - fontSize) / 2) - 1)
       G.setScissor()
       if current then
         local pop, close = tabIcons(tab.rect)
@@ -454,7 +490,9 @@ return function(mod)
       local near = menu ~= nil or Layout.inside({ x = handle.x - 30, y = handle.y - 6, w = handle.w + 36, h = handle.h + 36 }, mx, my)
       fill(handle, colors.tabActive, near and 0.95 or 0.35)
       color(near and colors.textActive or colors.text, near and 1 or 0.6)
-      for row = 0, 2 do G.rectangle("fill", handle.x + 5, handle.y + 6 + row * 4, handle.w - 10, 2) end
+      -- the Desk Badge: this mod's mark in the Trainer Badges family
+      local side = min(handle.w, handle.h) - 4
+      deskBadge(handle.x + floor((handle.w - side) / 2), handle.y + floor((handle.h - side) / 2), side, near and 1 or 0.6)
     end
     if menu then
       local rowH = theme.metrics.tab
