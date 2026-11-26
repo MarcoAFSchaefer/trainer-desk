@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.0
+
+- The arrangement of the panels and the theme now belong to the save that is open, kept in the game's per-save store for mods. They used to sit in one file shared by every save and by every copy of the game that is open, so two copies overwrote each other. A save with nothing of its own yet starts from the shared ones.
+
 ## 0.8.0
 
 - **Badges on the tabs.** A panel may bring its mod's mark: `register{ ..., icon = function(x, y, size, alpha) }` is drawn before the title in the tab (`features.icon`). Tabs with a mark are a little wider.

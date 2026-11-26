@@ -3,7 +3,7 @@
   "title": "Trainer Desk",
   "author": "MarcoAFSchaefer",
   "summary": "An IDE-style layout: the game in the middle, dockable tabbed panels from other mods around it, with draggable dividers and themes.",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "categories": [
     "UI",
     "LIBRARY"

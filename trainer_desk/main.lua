@@ -31,10 +31,53 @@ return function(mod)
   local I18n = assert(load(assert(mod:read("i18n.lua")), "@trainer_desk/i18n.lua"))()(mod, function() return option("language") end)
   local T = I18n.T
 
+  -- What belongs to one save. The game keeps a store for mods per save slot
+  -- (mod.storage); the shared cache (mod.cache) is the same for every save and
+  -- for every copy of the game that is open. A save that has nothing of its own
+  -- yet starts from what the shared cache holds, and from then on keeps its own.
+  local PerSave = { values = nil, id = nil, checked = -math.huge, listeners = {}, dirty = false, wrote = 0 }
+  local function perSaveFlush()
+    if not (PerSave.dirty and PerSave.values) then return end
+    PerSave.dirty, PerSave.wrote = false, love.timer.getTime()
+    pcall(mod.storage.write, mod.storage, PerSave.game, "state", PerSave.values)
+  end
+  -- Which save is open: asked when the session changes, at most every few seconds.
+  local function perSaveBind(g)
+    if not (type(g) == "table" and g.session and g.save and g.phase == "field"
+        and type(mod.storage) == "table" and mod.storage.context and mod.storage.read and mod.storage.write) then return end
+    local now = love.timer.getTime()
+    if PerSave.dirty and now - PerSave.wrote >= 2 then perSaveFlush() end
+    if PerSave.session == g.session or now - PerSave.checked < 5 then return end
+    PerSave.session, PerSave.checked = g.session, now
+    local ok, context = pcall(mod.storage.context, mod.storage, g)
+    local id = ok and type(context) == "table" and context.playthroughId or nil
+    if id and id ~= PerSave.id then
+      perSaveFlush()
+      local okRead, data = pcall(mod.storage.read, mod.storage, g, "state")
+      PerSave.id, PerSave.game, PerSave.values = id, g, okRead and type(data) == "table" and data or {}
+      for _, listener in ipairs(PerSave.listeners) do pcall(listener) end
+    end
+  end
+  local function perSaveRead(key)
+    local own = PerSave.values and PerSave.values[key]
+    if type(own) == "string" then return own end
+    return mod.cache and mod.cache.read and mod.cache:read(key) or nil
+  end
+  -- `soon`: written at once (a setting); otherwise within two seconds (a counter).
+  local function perSaveWrite(key, text, soon)
+    if not PerSave.values then
+      -- no save open yet: the shared cache, as it always was
+      if mod.cache and mod.cache.write then mod.cache:write(key, text) end
+      return
+    end
+    if PerSave.values[key] == text then return end
+    PerSave.values[key], PerSave.dirty = text, true
+    if soon then perSaveFlush() end
+  end
   local LAYOUT_KEY, THEME_KEY = "layout/v1", "theme"
   local panels, order = {}, {}        -- id -> panel, and registration order
-  local layout = Layout.decode(mod.cache and mod.cache.read and mod.cache:read(LAYOUT_KEY) or nil)
-  local themeId = mod.cache and mod.cache.read and mod.cache:read(THEME_KEY) or "dark"
+  local layout = Layout.decode(perSaveRead(LAYOUT_KEY))
+  local themeId = perSaveRead(THEME_KEY) or "dark"
   local theme = Themes.resolve(themeId)
   local menu
   local font, fontSize
@@ -63,6 +106,17 @@ return function(mod)
   local function now() return love.timer.getTime() end
   local function enabled() return active and option("enabled") ~= false end
   local function markSave() saveAt = saveAt or now() + 0.5 end
+  -- Another save was opened: its own arrangement and theme (or, with none of
+  -- its own yet, the shared ones it starts from).
+  PerSave.listeners[#PerSave.listeners + 1] = function()
+    layout = Layout.decode(perSaveRead(LAYOUT_KEY))
+    for _, id in ipairs(order) do
+      if panels[id] then Layout.adopt(layout, id, panels[id].side, panels[id].first) end
+    end
+    themeId = perSaveRead(THEME_KEY) or "dark"
+    theme = Themes.resolve(themeId)
+    saveAt = nil
+  end
   local function uiFont()
     if not font or fontSize ~= theme.metrics.font then
       fontSize = theme.metrics.font
@@ -149,7 +203,7 @@ return function(mod)
   function api.setTheme(id)
     if not Themes.list[id] then return false end
     themeId, theme = id, Themes.resolve(id)
-    if mod.cache and mod.cache.write then mod.cache:write(THEME_KEY, id) end
+    perSaveWrite(THEME_KEY, id, true)
     return true
   end
   -- "dock.<panel id>:<port>,...": the UDP port each floating panel's window
@@ -722,7 +776,7 @@ return function(mod)
     syncScreenPanel()
     if saveAt and now() >= saveAt and not drag then
       saveAt = nil
-      if mod.cache and mod.cache.write then mod.cache:write(LAYOUT_KEY, Layout.encode(layout)) end
+      perSaveWrite(LAYOUT_KEY, Layout.encode(layout), true)
     end
   end
 
@@ -865,6 +919,7 @@ return function(mod)
     end
   end
   mod.hooks:wrap("core.update", function(nextHook, updateGame, dt)
+    pcall(perSaveBind, updateGame)
     local ok, err = pcall(floatingTick)
     if not ok and not logged.floating then logged.floating = true; mod.log:warn("floating panels: %s", tostring(err)) end
     return nextHook(updateGame, dt)
